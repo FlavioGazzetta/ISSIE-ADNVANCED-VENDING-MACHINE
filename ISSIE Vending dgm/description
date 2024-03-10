@@ -1,1 +1,6 @@
-
+in the folder you can find the .dgm files and a .drpj file called Vending_Machine
+if you wish to run this on ISSIE, all you have to do is:
+- download the folder
+- open ISSIE
+- go to the file you downloaded
+- open the Vending_Machine.drpj file
