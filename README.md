@@ -32,7 +32,7 @@ git clone https://github.com/FlavioGazzetta/ISSIE-ADNVANCED-VENDING-MACHINE.git
 
 Follow these steps to set up the project environment:
 
-1. Install the required digital design simulation software, if not already installed.
+1. Install the required digital design simulation software (ISSIE), if not already installed then follow this link: https://github.com/tomcl/issie/releases
 2. Load the project files into your software.
 3. Follow the software's instructions to simulate or deploy the vending machine logic onto a suitable FPGA or another digital platform.
 
@@ -46,5 +46,5 @@ We welcome contributions to the ISSIE Vending Machine Project! If you have sugge
 
 ## Acknowledgments
 
-- A special thanks to my lab partner & friend Michael Li for his help and contribution to this project.
+- A special thanks to Michael Li for his help and contribution to this project.
 - Inspired by the real-world applications of digital logic in everyday devices.
