@@ -44,11 +44,7 @@ This project can be used as an educational tool for understanding digital system
 
 We welcome contributions to the ISSIE Vending Machine Project! If you have suggestions for improvements or new features, feel free to fork the repository and submit a pull request.
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE.md file for details.
-
 ## Acknowledgments
 
-- A special thanks to my lab partner Michael Li for his help and contribution to this project.
+- A special thanks to my lab partner & friend Michael Li for his help and contribution to this project.
 - Inspired by the real-world applications of digital logic in everyday devices.
