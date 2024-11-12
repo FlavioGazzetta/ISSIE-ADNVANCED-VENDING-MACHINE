@@ -1,50 +1,135 @@
+# ISSIE Advanced Vending Machine Project
 
-# ISSIE Vending Machine Project
+Welcome to the **ISSIE Advanced Vending Machine Project** repository! This project goes beyond the conventional vending machine system, incorporating advanced digital logic to create a user-friendly, feature-rich design. Utilizing a 4-bit architecture, this vending machine can dynamically handle item selection, coin input, price calculation, and change returns, making it a versatile tool for learning and experimentation.
 
-Welcome to the ISSIE Vending Machine Project repository! This project encapsulates the design and implementation of a unique vending machine system, using a 4-bit architecture for all operations. The vending machine integrates a custom digital logic design to handle various inputs and outputs, providing a user-friendly interface and an efficient vending process.
+---
 
-## Features
+## **Project Features**
 
-- **Give Back (Output):** Displays the change due to the customer.
-- **M (Motor Output):** Indicates when the motor is on, activating after a purchase is made with sufficient funds. It remains on until a specific input is triggered, and a clock cycle passes.
-- **Price (Output):** Shows the price of the selected item, pulled from a Read-Only Memory (ROM) that stores item prices.
-- **Current Balance (Output):** Displays the total amount of money inserted into the vending machine. It updates the balance with every clock cycle based on the inserted amount.
-- **LEDS (Output):** Represents the LEDs that prompt the user to select an item. They remain on until an item is selected and the clock cycle is updated.
-- **LEDC (Output):** Represents the LEDs prompting the insertion of money. They stay on until an item is successfully purchased.
-- **Buy (Input):** Should be kept at 0 until sufficient funds are inserted. Setting this high and updating the clock cycle after having enough money triggers the purchase process.
-- **Food Select (Input):** Allows the selection of items for purchase. It interacts with a ROM to display the price of the selected item after a clock tick.
-- **Coin Value (Input):** Indicates the amount of money being inserted into the vending machine. It's added to the current balance with every clock cycle.
-- **V (Input):** Transitions the machine from the motor being on to off in the next clock cycle and resets the machine to its initial state (except the previously selected item remains chosen).
+### Key Outputs:
+1. **Change (Give Back):**
+   - Displays the amount of change to be returned after a purchase.
+2. **Motor Control (M):**
+   - Activates the motor to dispense the selected item when the sufficient amount is reached. Turns off after the change is dispensed and the system is reset.
+3. **Price Display:**
+   - Retrieves and shows the price of the selected item from a Read-Only Memory (ROM) module.
+4. **Current Balance:**
+   - Updates and shows the cumulative value of inserted coins.
+5. **LED Indicators:**
+   - **LEDS:** Guides item selection, turning off once an item is chosen.
+   - **LEDC:** Prompts coin insertion, turning off when sufficient balance is reached.
 
-## Getting Started
+### Key Inputs:
+1. **Food Select:**
+   - Used to choose the desired item from the vending machine.
+2. **Coin Value:**
+   - Represents the value of coins inserted into the machine.
+3. **Buy Command:**
+   - Triggers the purchase process once sufficient funds are available.
+4. **Reset Command (V):**
+   - Resets the vending machine to its initial state for the next transaction.
 
-To get started with the ISSIE Vending Machine Project, clone this repository to your local machine using the following command:
+---
 
-```
-git clone https://github.com/FlavioGazzetta/ISSIE-ADNVANCED-VENDING-MACHINE.git
-```
+## **Implementation Overview**
 
-### Prerequisites
+### **Initial Design**
+The original state machine was a basic 4-state Moore machine, which transitioned between:
+1. **No Coin, No Selection**: Initial idle state.
+2. **Coin Inserted, No Selection**: Awaiting item selection.
+3. **Coin Inserted, Item Selected**: Ready to dispense.
+4. **Vending**: Dispensing the item.
 
-- A basic understanding of digital logic and circuits.
+### **Enhancements**
+To mimic the functionality of a real-world vending machine:
+- A **synchronous ROM module** was introduced to store item prices. Selecting an item retrieves its price from the ROM.
+- A **comparator circuit** checks whether the inserted balance meets or exceeds the price of the selected item.
+- A **remainder logic circuit** calculates and outputs the change if the inserted balance exceeds the item price.
 
-### Installation
+### **Custom Circuits**
+1. **Comparator:**
+   - Designed using XOR gates, multiplexers, and demultiplexers to compare the balance with the price.
+2. **Adder/Subtractor Logic:**
+   - Modified to perform continuous subtraction for change calculation.
+3. **Balance Tracker:**
+   - Tracks cumulative coin input using registers and a 4-bit adder.
 
-Follow these steps to set up the project environment:
+---
 
-1. Install the required digital design simulation software (ISSIE), if not already installed then follow this link: https://github.com/tomcl/issie/releases
-2. Load the project files into your software.
-3. Follow the software's instructions to simulate or deploy the vending machine logic onto a suitable FPGA or another digital platform.
+## **Simulation Steps**
 
-## Usage
+### Example: Purchasing an Item
+1. **Item Selection:**
+   - Select an item (e.g., price = 5).
+2. **Coin Input:**
+   - Insert coins in steps (e.g., insert 3, then 2 to reach 5).
+3. **Purchase:**
+   - Trigger the `Buy` input once the balance matches or exceeds the price.
+4. **Change Dispense:**
+   - The machine returns the remainder (if any) and resets the balance.
 
-This project can be used as an educational tool for understanding digital systems design, specifically focusing on vending machine logic. It's also an excellent reference for projects requiring the handling of various inputs and outputs, coin operation, and dynamic state management.
+### Step-by-Step Simulation:
+- **Initial State:** 
+  - Select item **0001** (price = 5 coins).
+  - Insert coins sequentially (3 → 2).
+  - Balance is now sufficient; motor activates, and remainder (if any) is displayed.
+- **Testing Other Scenarios:**
+  - Insert excess coins to verify remainder logic.
+  - Change item selection mid-process to validate dynamic ROM updates.
+  - Reset the system and test all outputs (LEDS, LEDC, M, etc.).
 
-## Contributing
+---
 
-We welcome contributions to the ISSIE Vending Machine Project! If you have suggestions for improvements or new features, feel free to fork the repository and submit a pull request.
+## **Project Architecture**
 
-## Acknowledgments
+The vending machine integrates the following:
+- **Synchronous ROM**: Stores item prices.
+- **Comparator**: Verifies if the balance meets the item price.
+- **Remainder Circuit**: Calculates change to be dispensed.
+- **State Machine**: Coordinates all operations, ensuring proper transitions between states.
 
-- A special thanks to Michael Li for his help and contribution to this project.
-- Inspired by the real-world applications of digital logic in everyday devices.
+The final design seamlessly integrates the advanced logic into the state machine, allowing for realistic vending machine behavior.
+
+---
+
+## **Key Features in Final Design**
+- **Dynamic Price Display:** Automatically updates based on item selection.
+- **Real-Time Balance Updates:** Tracks and displays the total amount inserted.
+- **Accurate Change Calculation:** Returns the correct remainder when balance exceeds the price.
+- **Error Handling:** Prevents simultaneous coin insertion and item selection during a transaction.
+- **Reset Functionality:** Resets the machine to its initial state after every purchase.
+
+---
+
+## **Simulation and Testing**
+
+Step-by-step simulations were performed to validate all functionalities, including:
+1. Coin insertion and balance tracking.
+2. Correct price retrieval from ROM.
+3. Proper match and remainder calculations.
+4. Transitioning between states during and after a purchase.
+
+The logic circuits and state machine performed flawlessly under all test scenarios.
+
+---
+
+## **Usage**
+
+This project serves as:
+1. An educational tool for learning digital logic design and state machines.
+2. A starting point for advanced projects involving coin-operated machines or dynamic input/output handling.
+
+---
+
+## **Contributing**
+
+Contributions are welcome! Feel free to fork the repository, implement improvements, and submit a pull request.
+
+---
+
+## **Acknowledgments**
+
+- Special thanks to **Michael Li** for valuable guidance.
+- Inspired by the practical applications of digital logic in everyday devices.
+
+---
