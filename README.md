@@ -1,135 +1,210 @@
-# ISSIE Advanced Vending Machine Project
+# Advanced ISSIE Vending Machine Project
 
-Welcome to the **ISSIE Advanced Vending Machine Project** repository! This project goes beyond the conventional vending machine system, incorporating advanced digital logic to create a user-friendly, feature-rich design. Utilizing a 4-bit architecture, this vending machine can dynamically handle item selection, coin input, price calculation, and change returns, making it a versatile tool for learning and experimentation.
-
----
-
-## **Project Features**
-
-### Key Outputs:
-1. **Change (Give Back):**
-   - Displays the amount of change to be returned after a purchase.
-2. **Motor Control (M):**
-   - Activates the motor to dispense the selected item when the sufficient amount is reached. Turns off after the change is dispensed and the system is reset.
-3. **Price Display:**
-   - Retrieves and shows the price of the selected item from a Read-Only Memory (ROM) module.
-4. **Current Balance:**
-   - Updates and shows the cumulative value of inserted coins.
-5. **LED Indicators:**
-   - **LEDS:** Guides item selection, turning off once an item is chosen.
-   - **LEDC:** Prompts coin insertion, turning off when sufficient balance is reached.
-
-### Key Inputs:
-1. **Food Select:**
-   - Used to choose the desired item from the vending machine.
-2. **Coin Value:**
-   - Represents the value of coins inserted into the machine.
-3. **Buy Command:**
-   - Triggers the purchase process once sufficient funds are available.
-4. **Reset Command (V):**
-   - Resets the vending machine to its initial state for the next transaction.
+This project represents a highly functional digital vending machine designed and implemented using **ISSIE**, a digital circuit simulator. It extends the basic vending machine functionality by integrating advanced features like price management, balance tracking, change calculation, and user feedback through LEDs. The design is implemented with state machines, custom logic circuits, and synchronous ROM for item price handling.
 
 ---
 
-## **Implementation Overview**
+## **Project Overview**
 
-### **Initial Design**
-The original state machine was a basic 4-state Moore machine, which transitioned between:
-1. **No Coin, No Selection**: Initial idle state.
-2. **Coin Inserted, No Selection**: Awaiting item selection.
-3. **Coin Inserted, Item Selected**: Ready to dispense.
-4. **Vending**: Dispensing the item.
-
-### **Enhancements**
-To mimic the functionality of a real-world vending machine:
-- A **synchronous ROM module** was introduced to store item prices. Selecting an item retrieves its price from the ROM.
-- A **comparator circuit** checks whether the inserted balance meets or exceeds the price of the selected item.
-- A **remainder logic circuit** calculates and outputs the change if the inserted balance exceeds the item price.
-
-### **Custom Circuits**
-1. **Comparator:**
-   - Designed using XOR gates, multiplexers, and demultiplexers to compare the balance with the price.
-2. **Adder/Subtractor Logic:**
-   - Modified to perform continuous subtraction for change calculation.
-3. **Balance Tracker:**
-   - Tracks cumulative coin input using registers and a 4-bit adder.
+The vending machine is designed to:
+- Track inserted coins and calculate the current balance.
+- Match the balance with the item's price using custom comparator circuits.
+- Provide the correct remainder if the balance exceeds the price.
+- Update user feedback indicators (LEDS, LEDC, and motor activation).
+- Support dynamic item selection and handle transactions efficiently.
 
 ---
 
-## **Simulation Steps**
+## **Features and Components**
 
-### Example: Purchasing an Item
-1. **Item Selection:**
-   - Select an item (e.g., price = 5).
-2. **Coin Input:**
-   - Insert coins in steps (e.g., insert 3, then 2 to reach 5).
-3. **Purchase:**
-   - Trigger the `Buy` input once the balance matches or exceeds the price.
-4. **Change Dispense:**
-   - The machine returns the remainder (if any) and resets the balance.
+### 1. **State Machine**
+The vending machine operates using a **4-state Moore machine**:
+- **Idle State:** No coin inserted, no item selected.
+- **Coin Input State:** Accepts coins and updates the balance.
+- **Item Selection State:** Matches the inserted balance with the selected item's price.
+- **Vending State:** Dispenses the item and calculates any remainder.
 
-### Step-by-Step Simulation:
-- **Initial State:** 
-  - Select item **0001** (price = 5 coins).
-  - Insert coins sequentially (3 → 2).
-  - Balance is now sufficient; motor activates, and remainder (if any) is displayed.
-- **Testing Other Scenarios:**
-  - Insert excess coins to verify remainder logic.
-  - Change item selection mid-process to validate dynamic ROM updates.
-  - Reset the system and test all outputs (LEDS, LEDC, M, etc.).
+<img src="Images/Vending_state.png" alt="State Machine Diagram" width="300">
 
 ---
 
-## **Project Architecture**
+### 2. **Synchronous ROM for Item Prices**
+The ROM stores predefined prices for items indexed by their selection number. If no item is selected (item = 0), the price remains 0.
 
-The vending machine integrates the following:
-- **Synchronous ROM**: Stores item prices.
-- **Comparator**: Verifies if the balance meets the item price.
-- **Remainder Circuit**: Calculates change to be dispensed.
-- **State Machine**: Coordinates all operations, ensuring proper transitions between states.
+- **Inputs:** Item selection number.
+- **Outputs:** Corresponding item price.
 
-The final design seamlessly integrates the advanced logic into the state machine, allowing for realistic vending machine behavior.
+<img src="Images/Vending_ROM_price_selector.png" alt="ROM Price Selector" width="300">  
+<img src="Images/Vending_ROM_content.png" alt="ROM Content Table" width="300">
 
 ---
 
-## **Key Features in Final Design**
-- **Dynamic Price Display:** Automatically updates based on item selection.
-- **Real-Time Balance Updates:** Tracks and displays the total amount inserted.
-- **Accurate Change Calculation:** Returns the correct remainder when balance exceeds the price.
-- **Error Handling:** Prevents simultaneous coin insertion and item selection during a transaction.
-- **Reset Functionality:** Resets the machine to its initial state after every purchase.
+### 3. **Balance Tracker**
+The balance tracker accumulates the total coin values inserted by the user. It uses registers and an adder circuit to compute the total balance dynamically.
+
+<img src="Images/Vending_amount.png" alt="Balance Tracker Circuit" width="300">
+
+---
+
+### 4. **Comparator and Same Value Check**
+- **Comparator Circuit:** Checks if the balance matches or exceeds the price of the selected item.
+- **Same-Value Check Circuit:** Ensures correctness during balance and price comparison.
+
+<img src="Images/Vending_Same_Value_Check.png" alt="Comparator Circuit" width="300">
+
+---
+
+### 5. **Remainder Calculation**
+The remainder logic calculates the difference when the balance exceeds the price. It ensures the correct change is returned to the user.
+
+<img src="Images/Vending_Remainder.png" alt="Remainder Logic Circuit" width="300">
+
+---
+
+### 6. **Arithmetic Logic Unit (Add/Subtract Circuit)**
+A custom ALU handles addition and subtraction for balance and remainder calculations.
+
+<img src="Images/Vending_addsub.png" alt="Add/Subtract Logic" width="300">
+
+---
+
+### 7. **Output Control**
+This subsystem controls the outputs of the vending machine, such as:
+- **LEDC (Insert Coins):** Indicates when coins are required.
+- **LEDS (Select Item):** Lights up when an item is selected.
+- **Motor (M):** Activates during item dispensing.
+
+<img src="Images/Vending_Output.png" alt="Output Control Logic" width="300">
+
+---
+
+### 8. **Price Comparator Integration**
+The price comparator circuit ensures that the vending machine can compare the price of the selected item with the user's inserted balance.
+
+<img src="Images/Vending_Right_Balance.png" alt="Price Comparator Circuit" width="300">
+
+---
+
+### 9. **Full Vending Machine Hierarchy**
+This image represents the complete integration of all subsystems into the vending machine hierarchy. It combines:
+- Price fetching and balance comparison.
+- Change calculation and feedback signals.
+- User interaction indicators.
+
+<img src="Images/Vending_ha.png" alt="Vending Machine Hierarchy" width="300">
+
+---
+
+### 10. **Next State Logic**
+The state machine's next-state logic transitions between idle, coin insertion, item selection, and vending. This logic ensures proper synchronization and state management.
+
+<img src="Images/Vending_nxt.png" alt="Next State Logic" width="300">
+
+---
+
+### 11. **Advanced Combined System**
+This image showcases the final integration of all features, including coin value input, item selection, balance matching, and change calculation.
+
+<img src="Images/Advanced_Vending_Combined.png" alt="Advanced Combined System" width="300">
 
 ---
 
 ## **Simulation and Testing**
 
-Step-by-step simulations were performed to validate all functionalities, including:
-1. Coin insertion and balance tracking.
-2. Correct price retrieval from ROM.
-3. Proper match and remainder calculations.
-4. Transitioning between states during and after a purchase.
+### Example Test Flow:
+1. **Item Selection:** Choose an item using the `Food_Select` input (e.g., price = 5).
+2. **Coin Insertion:** Input coins using `Coin_Value` (e.g., insert 3, then 2).
+3. **Match Check:** The comparator circuit activates when the balance matches or exceeds the price.
+4. **Dispense Item:** The motor activates, dispensing the item, and any remainder is returned.
 
-The logic circuits and state machine performed flawlessly under all test scenarios.
+### Example Outputs:
+- **LEDS:** Lights up when an item is selected.
+- **LEDC:** Indicates when coins are required.
+- **Motor (M):** Activates during item dispensing.
+- **Remainder:** Displays the change to be returned.
 
----
-
-## **Usage**
-
-This project serves as:
-1. An educational tool for learning digital logic design and state machines.
-2. A starting point for advanced projects involving coin-operated machines or dynamic input/output handling.
+<img src="Images/Vending_Output.png" alt="Example Simulation Output" width="300">
 
 ---
 
-## **Contributing**
+### 12. **Adder Circuit**
+This diagram shows the adder circuit used for calculating the total balance of coins inserted. It takes the previous balance (`VALUE_BEFORE`) and the current coin value (`VALUE_CURRENT`) as inputs and produces the updated balance.
 
-Contributions are welcome! Feel free to fork the repository, implement improvements, and submit a pull request.
+<img src="Images/Vending_amount.png" alt="Adder Circuit" width="300">
+
+---
+
+### 13. **Subtraction Logic**
+The subtraction circuit is part of the remainder logic, ensuring that the vending machine can compute the difference between the inserted balance and the price of the selected item.
+
+<img src="Images/Vending_addsub.png" alt="Subtraction Logic" width="300">
 
 ---
 
-## **Acknowledgments**
+### 14. **Hierarchy of Remainder Logic**
+This image integrates the balance, price, and remainder calculations into a cohesive subsystem. It ensures the correct remainder is calculated and outputs the value to the `GIVE_BACK` signal.
 
-- Special thanks to **Michael Li** for valuable guidance.
-- Inspired by the practical applications of digital logic in everyday devices.
+<img src="Images/Vending_Remainder.png" alt="Remainder Hierarchy" width="300">
 
 ---
+
+### 15. **Price Selector**
+This circuit fetches the price of an item from the synchronous ROM based on the `VALUE_SELECTION` input. The price is then used for comparison with the current balance.
+
+<img src="Images/Vending_ROM_price_selector.png" alt="Price Selector" width="300">
+
+---
+
+### 16. **State Transition Diagram**
+This diagram shows the logic for transitioning between states based on inputs such as `C` (Coin Input), `S` (Selection), and other control signals. It ensures the vending machine operates correctly at each stage of a transaction.
+
+<img src="Images/Vending_nxt.png" alt="State Transition Logic" width="300">
+
+---
+
+### 17. **Same Value Check**
+The same-value check circuit validates whether two inputs (balance and price) are equal. This is essential for determining if the vending machine is ready to dispense an item.
+
+<img src="Images/Vending_Same_Value_Check.png" alt="Same Value Check" width="300">
+
+---
+
+### 18. **ROM Price Content**
+The table below shows the specific contents of the ROM, mapping each selection value to its corresponding price. Item 0 represents no selection and has a price of 0.
+
+<img src="Images/Vending_ROM_content.png" alt="ROM Price Content Table" width="300">
+
+---
+
+### 19. **Advanced Integration**
+This diagram represents the integration of all individual subsystems, including the ROM price selector, balance tracker, comparator, and remainder logic. It handles the full workflow from coin insertion to item vending and change return.
+
+<img src="Images/Advanced_Vending_Combined.png" alt="Advanced Integration" width="300">
+
+---
+
+### 20. **Motor and LED Control**
+The motor control (`M`) activates when the vending process begins. LED indicators (`LEDC` and `LEDS`) provide feedback on whether coins are required or an item is selected.
+
+<img src="Images/Vending_Output.png" alt="Motor and LED Control" width="300">
+
+---
+
+### 21. **Final System Overview**
+This image combines all components into the final, fully operational vending machine system. It incorporates state transitions, balance and price logic, and output controls.
+
+<img src="Images/Vending_ha.png" alt="Final System Overview" width="300">
+
+---
+
+### 22. **Register-Based Balance Update**
+The registers store the balance values, allowing the vending machine to track and update the user's total coin input efficiently.
+
+<img src="Images/Vending_amount.png" alt="Register-Based Balance Update" width="300">
+
+---
+
+### 23. **Challenge Integration**
+This diagram integrates all circuits into the final challenge system, showcasing how various subsystems interact to implement advanced vending machine features.
+
+<img src="Images/Advanced_Vending_Combined.png" alt="Challenge Integration" width="300">
