@@ -38,10 +38,38 @@ Used to split a 2 bit input into 2 individual bits in 2 outpus
 
 ---
 
-### 4. **Adder Circuit**
-Used to calculate the total balance by summing the previous balance with the value of the inserted coin.
+### 20. **Flow Node N1**
+Represents a specific logic node within the vending machine's operation.
 
-<img src="../Images/Vending_amount.png" alt="Adder Circuit" width="300">
+<img src="../Images/Vending_n1.png" alt="Flow Node N1" width="300">
+
+---
+
+### 21. **Flow Node N2**
+Another logic node highlighting interactions within the vending process.
+
+<img src="../Images/Vending_n2.png" alt="Flow Node N2" width="300">
+
+---
+
+### 18. **Next State Logic**
+Handles state transitions based on current inputs, ensuring smooth progression through the machine's operation.
+
+<img src="../Images/Vending_nxt.png" alt="Next State Logic" width="300">
+
+---
+
+### 15. **Output Control**
+Manages outputs such as LEDs (`LEDC` and `LEDS`) and the motor (`M`) for item dispensing.
+
+<img src="../Images/Vending_Output.png" alt="Output Control" width="300">
+
+---
+
+### 7. **Challenge Implementation**
+The integration of subsystems into the vending machine to meet the project's specific challenges and objectives.
+
+<img src="../Images/Vending_Challenge.png" alt="Challenge Implementation" width="300">
 
 ---
 
@@ -56,13 +84,6 @@ This circuit computes the remainder (change) when the balance exceeds the price 
 The XOR logic facilitates comparison between inputs, such as balance and price, by evaluating bitwise differences.
 
 <img src="../Images/Vending_axorb.png" alt="XOR Logic" width="300">
-
----
-
-### 7. **Challenge Implementation**
-The integration of subsystems into the vending machine to meet the project's specific challenges and objectives.
-
-<img src="../Images/Vending_Challenge.png" alt="Challenge Implementation" width="300">
 
 ---
 
@@ -120,17 +141,10 @@ Calculates the remainder to be returned as change after a transaction.
 
 ---
 
-### 15. **Output Control**
-Manages outputs such as LEDs (`LEDC` and `LEDS`) and the motor (`M`) for item dispensing.
+### 14. **Remainder Logic**
+Calculates the remainder to be returned as change after a transaction.
 
-<img src="../Images/Vending_Output.png" alt="Output Control" width="300">
-
----
-
-### 16. **Right Balance Logic**
-Ensures the balance and price are matched accurately during transactions.
-
-<img src="../Images/Vending_Right_Balance.png" alt="Right Balance Logic" width="300">
+<img src="../Images/Vending_Same_Value_Check.png" alt="Remainder Logic" width="300">
 
 ---
 
@@ -141,6 +155,13 @@ A high-level integration of the balance logic with comparator and remainder circ
 
 ---
 
+### 4. **Adder Circuit**
+Used to calculate the total balance by summing the previous balance with the value of the inserted coin.
+
+<img src="../Images/Vending_amount.png" alt="Adder Circuit" width="300">
+
+---
+
 ### 19. **Advanced Combined System**
 An integrated view of all components, including coin input, ROM price fetching, and balance management.
 
@@ -148,24 +169,10 @@ An integrated view of all components, including coin input, ROM price fetching, 
 
 ---
 
-### 20. **Flow Node N1**
-Represents a specific logic node within the vending machine's operation.
+### 16. **Right Balance Logic**
+Ensures the balance and price are matched accurately during transactions.
 
-<img src="../Images/Vending_n1.png" alt="Flow Node N1" width="300">
-
----
-
-### 21. **Flow Node N2**
-Another logic node highlighting interactions within the vending process.
-
-<img src="../Images/Vending_n2.png" alt="Flow Node N2" width="300">
-
----
-
-### 18. **Next State Logic**
-Handles state transitions based on current inputs, ensuring smooth progression through the machine's operation.
-
-<img src="../Images/Vending_nxt.png" alt="Next State Logic" width="300">
+<img src="../Images/Vending_Right_Balance.png" alt="Right Balance Logic" width="300">
 
 ---
 
