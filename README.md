@@ -42,259 +42,139 @@ This guide explains how to set up and use the project.
 ---
 
 
-### **About the project**
-This project was split into 2 parts, initially I made the challenge section of the project, then added a whole knew level of complexity to further extend and apply my knowledge for this project.
+# Vending Machine Project - Enhanced State Machine with Money Tracking
 
-
-## **Challenge Part**
-
-# DECA Part 2 Section 2 - Vending Machine State Machine
-
-This document provides a detailed description of the procedure and results for focusing on the design and simulation of a simple vending machine state machine.
-
-## **Procedure**
-
-# **1. Moore State Machine Map Analysis**
-The lab session began by analysing a **Moore state machine**. The state machine consisted of a 2-bit state value, broken into:
-- **I1** and **I2**: Representing the bits of the current state.
-- **N1** and **N2**: Representing the bits of the next state.
-
-To simplify the state transitions, **Karnaugh maps** were used for `N1` and `N2`. These maps helped derive the Boolean equations needed for implementing the state machine.
+This project simulates a **vending machine** using a **state machine** design, implemented in ISSIE. The machine tracks state transitions, monitors input money, calculates balances, and handles item selection. It is split into two parts: the **Challenge Part** and a more **Advanced Extension**.
 
 ---
 
-## **2. Karnaugh Maps**
-The derived Karnaugh maps for `N1` and `N2` provided simplified Boolean expressions for each output bit of the next state. The solutions for these maps were as follows:
+## **Challenge Part: Basic Vending Machine State Machine**
 
-- **For N1**: (Insert Boolean Expression Here)
-- **For N2**: (Insert Boolean Expression Here)
+The challenge focused on designing a **simple state machine** with four states and corresponding outputs. 
 
----
+### **State Machine Overview**
+The vending machine operates in four states:
+1. **Start (00):** Waiting for input (coin or selection).
+2. **W/Coin (01):** Waiting for a coin to be inserted.
+3. **W/Sel (10):** Waiting for a selection.
+4. **VEND (11):** Dispensing the product.
 
-## **3. Logic Implementation in ISSIE**
+### **Outputs**
+- **LED-S:** Indicates the "Start" state.
+- **LED-C:** Indicates that a coin has been inserted.
+- **M:** Activates the motor to dispense the item.
 
-- **Bit Splitting**:
-  To simplify the design process, the **I1** and **I2** inputs were split into separate bits on an ISSIE sheet. This was an optional step but made the overall design more modular and easier to debug.
+### **How It Works**
+1. The vending machine transitions between states based on input values (`I1`, `I2`) and outputs (`N1`, `N2`) using **Karnaugh maps** for simplification.
+2. A **D-Multiplexer** determines which output (LED-S, LED-C, or M) should activate based on the current state.
+3. The design ensures smooth transitions between states and simulates proper functionality using step simulations in ISSIE.
 
-- **Design of `N1` and `N2` Circuits**:
-  Two separate sheets were created in ISSIE, one for `N1` and one for `N2`. These sheets implemented the Boolean equations derived from the Karnaugh maps. Truth tables were used to verify the correctness of the designs.
+### **Advanced Feature: Vending Detection**
+A **vending detection mechanism** was added:
+- **If vending is in progress (`V = 0`):** The state machine remains in `VEND (11)`.
+- **If vending completes (`V = 1`):** The state transitions back to `Start (00)`.
 
----
-
-# **4. Combining `N1` and `N2` into `nxt`**
-
-The outputs from `N1` and `N2` were combined into a single sheet called `nxt`. This represented the next-state logic for the state machine. The design was verified with a truth table to ensure proper transitions.
-
----
-
-# **5. State Machine Integration**
-
-The `nxt` logic was integrated into a larger **State Machine** sheet. The following components were included:
-- Input state bits (**I1**, **I2**).
-- `nxt` logic circuit for transitioning states.
-- Output state bits (**N1**, **N2**).
-
-The state machine was tested using a step simulation to ensure proper state transitions.
+This addition made the state machine more robust and realistic, enabling it to properly handle vending scenarios.
 
 ---
 
-# **Output Logic for the basic Vending Machine**
+## **Advanced Extension: Adding Money and Pricing Features**
 
-# **1. Truth Table for Outputs**
-The vending machine outputs included:
-- **LED-S**: Indicates "Start."
-- **LED-C**: Indicates "Coin Inserted."
-- **M**: Activates the motor to dispense the product.
+To make the vending machine more like a real-world system, **money tracking** and **item pricing** were integrated.
 
-A truth table was provided to define the outputs for each state:
-- **Start (00)**: Initialize.
-- **W/Sel (10)**: Waiting for a selection.
-- **W/Coin (01)**: Waiting for coin insertion.
-- **VEND (11)**: Dispense the product.
+### **Key Features**
+1. **Item Pricing:**
+   - A **ROM (Read-Only Memory)** stores the price of each item.
+   - The price for each item can be retrieved using the item's selection input (`Food_Select`).
 
-# **2. D-Multiplexer Design**
-A **D-multiplexer** was implemented to select the correct output signal (LED-S, LED-C, or M) based on the current state.
+2. **Balance Calculation:**
+   - A custom-designed **coin balance circuit** tracks the total money inserted into the machine.
+   - Uses:
+     - **Registers** to store balances.
+     - A **4-bit adder** for summing input coins with the current balance.
 
-# **3. Simulation**
-The output circuit was tested with a truth table, and the results matched the expected behavior:
-- **Start (00)**: LED-S activated.
-- **W/Sel (10)**: LED-C activated.
-- **W/Coin (01)**: Motor not activated.
-- **VEND (11)**: Motor activated.
+3. **Price Comparison:**
+   - A **custom comparator** checks if the total balance meets or exceeds the item's price.
+   - If the balance matches or exceeds the price, the vending machine proceeds to dispense the item.
 
-Finally, the output logic was integrated into the state machine and verified through step simulations.
+4. **Remainder Logic:**
+   - Calculates the remaining balance after the purchase.
+   - Provides a refund (`Give_Back`) if the balance exceeds the item's price.
 
 ---
 
-# **Adding Vending Detection**
+### **How It Works**
+1. **Initial Setup:**
+   - Users select an item using the **Food_Select** input.
+   - The machine retrieves the item's price from the ROM.
 
-# **Objective**
-To modify the state machine to:
-- Stay in **VEND (11)** state while the vending machine is dispensing (`V = 0`).
-- Transition back to **Start (00)** after vending is complete (`V = 1`).
+2. **Adding Money:**
+   - Users insert coins using the **Coin_Value** input.
+   - The total balance updates dynamically and is compared against the item's price.
 
-# **Approach**
-1. The output from the `nxt` logic was passed through a **D-multiplexer**.
-2. Two **multiplexers** were added:
-   - One controlled by `V` to decide whether to stay in state `11` or transition.
-   - One controlled by `M` to ensure state transitions occur only when vending is complete.
+3. **Making a Purchase:**
+   - Once the balance meets or exceeds the item's price, the machine transitions to the **VEND (11)** state.
+   - The motor (`M`) activates to dispense the item.
+   - Any remaining balance is refunded (`Give_Back`).
 
-# **Simulation**
-The logic circuit was verified through step simulations:
-- The vending machine remained in state `11` while `V = 0`.
-- It transitioned back to state `00` when `V = 1`.
-- The behavior matched the truth table, with the rows highlighted in red indicating the impact of `V`.
-
----
-
-### **Truth Table Summary**
-Key values:
-- **Start (00):** Initial state.
-- **W/Sel (10):** Waiting for a selection.
-- **W/Coin (01):** Waiting for coin insertion.
-- **VEND (11):** Dispensing the product.
-
-| Q0 | Q1 | C | S | V | N  | M | LED-S | LED-C |
-|----|----|---|---|---|----|---|-------|-------|
-| 0  | 0  | 0 | 0 | 0 | 00 | 0 | 1     | 1     |
-| 0  | 0  | 0 | 0 | 1 | 00 | 0 | 1     | 1     |
-| 0  | 0  | 0 | 1 | 0 | 01 | 0 | 1     | 1     |
-| 1  | 1  | 1 | 1 | 0 | 11 | 1 | 0     | 0     |
-| 1  | 1  | 1 | 1 | 1 | 00 | 1 | 0     | 0     |
-
-(Continue with the full truth table if necessary.)
+4. **Changing Items:**
+   - Users can change their selection at any time.
+   - The machine dynamically adjusts the price and balance tracking for the new item.
 
 ---
 
-### **Conclusion**
+### **Final Circuit Design**
+The final vending machine integrates:
+- **Inputs:**
+  - `Food_Select`: Item selection.
+  - `Coin_Value`: Value of inserted coins.
+- **Outputs:**
+  - `LEDC, LEDS, M`: Indicate the current state.
+  - `Current_Balance`: Tracks the total money inserted.
+  - `Price`: Displays the item's price.
+  - `Remainder`: Shows the remaining balance.
+  - `Give_Back`: Refund amount after a purchase.
+- **Logic Blocks:**
+  - **State Machine:** Manages transitions between states.
+  - **ROM:** Stores item prices.
+  - **Comparator:** Compares the balance with the item's price.
+  - **Adder/Subtractor Logic:** Tracks and calculates the balance and remainder.
 
-The vending machine state machine was successfully designed, implemented, and verified. The additional challenge to include vending detection using the `V` input was completed, ensuring the machine behaved as expected in all scenarios.
+---
+
+### **Simulation Results**
+Step simulations confirmed the functionality:
+1. **Coin Input and Balance Tracking:**
+   - Added 3 coins → Balance: 3 (Remainder = 0 as 3 < Price).
+   - Added 2 more coins → Balance: 5 (Price matched, item dispensed).
+2. **Refunds:**
+   - Added 1 extra coin → Balance reset to 0, `Give_Back = 1`.
+3. **Item Selection:**
+   - Changed item → Updated price from ROM.
+   - Verified correct balance comparison and dispensing behavior.
+
+---
+
+### **Key Improvements**
+1. Realistic pricing and balance tracking using a **ROM** and **custom comparator.**
+2. Dynamic handling of state transitions, allowing:
+   - Money to be added before selecting an item.
+   - Seamless state changes during item selection and coin insertion.
+3. Refund functionality when the inserted money exceeds the item's price.
+
+---
+
+## **Conclusion**
+The vending machine now operates as a fully functional simulation with features resembling a real-world vending machine. It can:
+- Track and compare inserted money with the item's price.
+- Dispense items only when the required balance is met.
+- Refund excess money after purchases.
+- Dynamically adjust for item selection changes.
 
 This project demonstrates:
-- The use of Karnaugh maps for Boolean simplifications.
-- Modular design in ISSIE for state machines and output logic.
-- Step-by-step simulations for verifying logic circuits.
+- The application of **state machines** to real-world systems.
+- Advanced logic design using ISSIE tools.
+- The integration of additional components like **ROM**, **custom comparators**, and **adder circuits**.
 
-![Moore Map Initial State](Images/Vending_flow_chart.png)
-
-Now, what I wanted to make was a system that checks whether or not the right amount of money has been input into the machine.
-
-When facing the challenge of part two, section 2, we decided that this was something we could and wanted to improve. We started with a vending machine with four simple states: without a coin or selection, in a starting position, or already vending. But what if we made this more like a conventional vending machine? 
-
-The decision was to implement a **money feature**. This feature was structured so that the user wouldn't simply input a coin, but instead reach a certain value based on the item's price. We used DECA Lecture Five, where we learned to use a **ROM**. In our ROM, we stored specific values corresponding to the price of an item based on its item number.
-
-## Creating a Synchronous ROM
-
-The first step was creating a synchronous ROM:
-
-![ROM Design](image.png)
-
-### ROM Content
-
-The ROM contained the following:
-
-- The price for item `0` was `0`, as selecting `0` implies no item has been selected yet.
-
-## Adding a Comparator
-
-Next, we integrated the ROM with a **comparator** (custom-made) to check whether the chosen value from the ROM was equal to or smaller than the balance:
-
-![Comparator Logic](image.png)
-
-## Remainder Logic Circuit
-
-We prepared a remainder logic circuit. It calculates the remaining balance by subtracting the price (from the ROM) from the input balance:
-
-![Remainder Logic Circuit](image.png)
-
-### Custom Comparator Design
-
-Since no comparator was available on ISSIE, we built one ourselves. The comparator logic used XOR gates and multiplexers:
-
-1. XOR gates compare bits of A and B.
-2. Bits were grouped into pairs using `bus selects` and `merge wires`.
-3. A multiplexer determined the output using these grouped values.
-4. A D-multiplexer determined whether `A > B` or `A < B`.
-
-![Custom Comparator](image.png)
-
-Another important aspect was utilizing the **Add/Sub Logic Circuit** (from a previous section) with the subtraction input always set high, ensuring subtraction operations.
-
-## Coin Balance Calculation
-
-We then designed a circuit to track the total money input into the vending machine. This used:
-- **Registers**
-- A **4-bit adder** (from ISSIE)
-- Current and previous balance as inputs.
-
-![Balance Calculation Circuit](image.png)
-
-## Full System Integration
-
-We combined all components:
-- Input `V_C` was passed through the balance logic circuit to calculate the new current balance.
-- The balance fed into the remainder circuit and the comparator.
-- A multiplexer and registers updated the balance and determined if the price was met.
-
-### Fixing Initial State Issues
-
-Initially, the system output `match = 1` (true) for a zero balance. This was fixed using constants and registers to ensure `match = 0` until the first clock rising edge.
-
-### Final Circuit Design
-
-The integrated circuit looked like this:
-
-![Final Circuit](image.png)
-
-## Step Simulation Results
-
-We used step simulations to verify the vending machine logic.
-
-### Example Simulation
-
-#### Initial State:
-- Selected item: `Price = 5`
-- Clock tick updated.
-
-#### Adding Coins:
-1. Added 3 coins → Balance: `3` (remainder = `0` as `3 < 5`).
-2. Added 2 more coins → Balance: `5`, `match = 1` (true).
-3. Added 1 coin → Balance resets to `0`, and the remainder outputs `1`.
-
-#### Changing Items:
-1. Changed ROM to item `2`, `V_C = 3`.
-2. Updated clock tick, adding `7` coins.
-3. Verified `Balance > Price`, with correct remainder.
-
-After minor modifications (e.g., adding state machine inputs/outputs), step simulation results remained consistent.
-
-## Combining with the State Machine
-
-The enhanced logic circuit was integrated with the state machine:
-
-### Outputs:
-1. `LEDC`, `LEDS`, `M` – Previous state machine outputs.
-2. `Current_Balance` – Total coins input.
-3. `Price` – Shows item price from the ROM.
-4. `Remainder` – Current remainder.
-5. `Give_Back` – Amount refunded one clock tick after balance meets the price.
-
-### Inputs:
-1. `Food_Select` – Selects an item.
-2. `Coin_Value` – Specifies coin value.
-
-![State Machine Integration](image.png)
-
-### Step Simulation Results:
-1. Selected item `0001` (`Price = 5`).
-2. Input `4` coins, then `3` more → Balance: `7`.
-3. Selected "Buy" → Balance reset to `0`, `Give_Back = 2`.
-4. Verified adding money and changing items during simulation worked correctly.
-
-### Final Testing:
-Tested remaining edge cases:
-- Adding money before selecting an item.
-- Ensuring the state transitions correctly.
-
-With these features, the vending machine behaves more like a real-world system, including tracking money, providing change, and handling item selection efficiently.
+Feel free to explore, modify, and contribute to this project!
 
