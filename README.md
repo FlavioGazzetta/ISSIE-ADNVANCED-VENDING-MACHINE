@@ -24,21 +24,17 @@ The flowchart outlines the logical flow of the vending machine, from coin insert
 
 ---
 
-### 2. **State Machine**
-The machine operates using a Moore model with four primary states:
-- **Idle State:** Awaiting user input.
-- **Coin Input State:** Accepts coins and updates the balance.
-- **Selection State:** Matches balance to price.
-- **Vending State:** Dispenses the item and calculates the remainder.
-
-<img src="Images/Vending_state.png" alt="State Machine Diagram" width="300">
-
----
-
-### 3. **System Hierarchy**
+### 2. **System Hierarchy**
 This diagram shows the hierarchical structure of the vending machine, including ROM, comparator, remainder logic, and state transitions.
 
 <img src="Images/Vending_Hirearchy.png" alt="System Hierarchy" width="300">
+
+---
+
+### 3. **2 bit bus separator Circuit**
+Used to split a 2 bit input into 2 individual bits in 2 outpus 
+.
+<img src="Images/Vending_state.png" alt="State Machine Diagram" width="300">
 
 ---
 
@@ -84,6 +80,13 @@ Determines whether the balance is greater than, less than, or equal to the price
 
 ---
 
+### 10. **Half adder logic**
+A complete hierarchical view of the vending machine system, showing all modules and subsystems.
+
+<img src="Images/Vending_ha.png" alt="System Hierarchy Overview" width="300">
+
+---
+
 ### 10. **Full Adder Logic**
 The full adder facilitates bitwise addition within the balance tracking system.
 
@@ -102,8 +105,6 @@ This circuit is an expanded version of the full adder, used for 4-bit operations
 The ROM price selector fetches prices for items based on the user's selection.
 
 <img src="Images/Vending_ROM_price_selector.png" alt="Price Selection Circuit" width="300">
-
----
 
 ### 13. **ROM Content**
 This table represents the contents of the ROM, mapping item numbers to their prices.
@@ -165,13 +166,6 @@ Represents a specific logic node within the vending machine's operation.
 Another logic node highlighting interactions within the vending process.
 
 <img src="Images/Vending_n2.png" alt="Flow Node N2" width="300">
-
----
-
-### 22. **System Hierarchy Overview**
-A complete hierarchical view of the vending machine system, showing all modules and subsystems.
-
-<img src="Images/Vending_ha.png" alt="System Hierarchy Overview" width="300">
 
 ---
 
