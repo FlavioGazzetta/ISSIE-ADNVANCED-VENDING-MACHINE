@@ -141,13 +141,6 @@ A high-level integration of the balance logic with comparator and remainder circ
 
 ---
 
-### 18. **Next State Logic**
-Handles state transitions based on current inputs, ensuring smooth progression through the machine's operation.
-
-<img src="../Images/Vending_nxt.png" alt="Next State Logic" width="300">
-
----
-
 ### 19. **Advanced Combined System**
 An integrated view of all components, including coin input, ROM price fetching, and balance management.
 
@@ -169,10 +162,17 @@ Another logic node highlighting interactions within the vending process.
 
 ---
 
+### 18. **Next State Logic**
+Handles state transitions based on current inputs, ensuring smooth progression through the machine's operation.
+
+<img src="../Images/Vending_nxt.png" alt="Next State Logic" width="300">
+
+---
+
 ### 23. **Final Project Overview**
 A high-level overview of the vending machine's operation. (Replaced previous duplicate with this unique summary image.)
 
-<img src="../Images/Vending_Comparator.png" alt="Final Project Overview" width="300">
+<img src="../Images/Advanced_Vending_Combined.png" alt="Final Project Overview" width="300">
 
 ---
 
