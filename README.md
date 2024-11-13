@@ -176,5 +176,3 @@ This project demonstrates:
 - Advanced logic design using ISSIE tools.
 - The integration of additional components like **ROM**, **custom comparators**, and **adder circuits**.
 
-Feel free to explore, modify, and contribute to this project!
-
