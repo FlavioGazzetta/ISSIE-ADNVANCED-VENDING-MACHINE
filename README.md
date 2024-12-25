@@ -145,7 +145,7 @@ The final vending machine integrates:
 ### **Simulation Results**
 Step simulations confirmed the functionality:
 1. **Coin Input and Balance Tracking:**
-   - Added 3 coins → Balance: 3 (Remainder = 0 as 3 < Price).
+   - Added 3 coins → Balance: 3 (Remainder = 0 since 3 < Price).
    - Added 2 more coins → Balance: 5 (Price matched, item dispensed).
 2. **Refunds:**
    - Added 1 extra coin → Balance reset to 0, `Give_Back = 1`.
