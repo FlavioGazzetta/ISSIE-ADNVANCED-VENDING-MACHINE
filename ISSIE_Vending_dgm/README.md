@@ -170,11 +170,3 @@ Ensures the balance and price are matched accurately during transactions.
 A high-level overview of the vending machine's operation. (Replaced previous duplicate with this unique summary image.)
 
 <img src="../Images/Advanced_Vending_Combined.png" alt="Final Project Overview" width="300">
-
----
-
-## Final Adjustments:
-1. **"Vending_Hirearchy.png"** is used only once.
-2. All 23 images are uniquely referenced with correct descriptions.
-
-Let me know if any further refinements are required!
